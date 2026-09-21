@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- ============ EDIT THESE THREE LINES FIRST ============ -->
+<title>Stanley Barnes — Computer Engineer</title>
+<meta name="description" content="Stanley Barnes — Computer Engineering student at the University of Tennessee, Knoxville. Embedded systems, PCB design, and edge AI. Undergraduate researcher in the EPIC Lab." />
+<link rel="canonical" href="https://stanleybarnes.com/" />
+<!-- ====================================================== -->
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+
+<!-- Social preview (shows when your link is pasted into LinkedIn/Slack) -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Stanley Barnes — Computer Engineer" />
+<meta property="og:description" content="Computer Engineering student at UT Knoxville. Embedded systems, PCB design, and edge AI." />
+<meta property="og:url" content="https://stanleybarnes.com/" />
+
+<!-- Inline SVG favicon: no extra file, no extra request -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f2760c'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3ESB%3C/text%3E%3C/svg%3E" />
+
+<style>
+/* ===========================================================
+   1. DESIGN TOKENS — change these to restyle the whole site
+   =========================================================== */
+:root{
+  --bg:        #ffffff;
+  --surface:   #f7f7f5;
+  --fg:        #14161a;
+  --muted:     #5d646e;
+  --line:      #e3e4e1;
+  --accent:    #b4530a;          /* links, highlights */
+  --accent-bg: #fdf3e9;
+  --focus:     #0b64d6;
+
+  --maxw:   1080px;   /* wider than a 1-col site — two columns need room */
+  --side-w: 300px;    /* right column width on desktop */
+  --header-h: 54px;   /* used to offset the sticky sidebar */
+  --radius: 10px;
+  --pad: clamp(20px, 5vw, 40px);
+
+  /* System font stack = zero font downloads = instant text */
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Dark mode follows the device. No button, no JS, nothing to break. */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#111418; --surface:#181c22; --fg:#e9ecef; --muted:#a2abb6;
+    --line:#2a3039; --accent:#f2a25c; --accent-bg:#241b12; --focus:#7fb4ff;
+  }
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0 }
+
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%;
+      scroll-padding-top:calc(var(--header-h) + 16px) }
+
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--sans); font-size:17px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Global image safety net — nothing can ever overflow its column */
+img{ max-width:100%; height:auto }
+
+a{ color:var(--accent); text-decoration:underline; text-underline-offset:3px;
+   text-decoration-thickness:1px }
+a:hover{ text-decoration-thickness:2px }
+
+:focus-visible{ outline:2.5px solid var(--focus); outline-offset:3px; border-radius:3px }
+
+.skip{ position:absolute; left:-9999px; top:8px; z-index:200;
+       background:var(--fg); color:var(--bg); padding:10px 16px; border-radius:6px }
+.skip:focus{ left:8px }
+
+/* If JS fails for any reason, show everything as plain readable HTML */
+.no-js .anim{ opacity:1 !important; transform:none !important }
+
+/* ===========================================================
+   2. HEADER
+   =========================================================== */
+header{
+  position:sticky; top:0; z-index:100; height:var(--header-h);
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.bar{
+  max-width:var(--maxw); margin-inline:auto; height:100%;
+  padding:0 var(--pad); display:flex; align-items:center; gap:14px;
+}
+.bar .me{ font-weight:650; font-size:15px; text-decoration:none; color:var(--fg);
+          white-space:nowrap }
+.bar nav{ display:flex; gap:4px; margin-left:auto }
+.bar nav a{ font-size:14px; color:var(--muted); text-decoration:none;
+            padding:6px 10px; border-radius:6px }
+.bar nav a:hover{ color:var(--fg); background:var(--surface) }
+@media (max-width:700px){ .bar nav{ display:none } }
+
+/* ===========================================================
+   3. THE TWO-COLUMN SHELL
+   -----------------------------------------------------------
+   Source order is: <aside class="side"> FIRST, <main class="about">
+   SECOND. That is deliberate. On mobile the grid collapses to one
+   column and the browser renders DOM order, so the photo and
+   contact details appear first with no reordering tricks needed.
+   On desktop, explicit grid placement moves the aside to column 2.
+   =========================================================== */
+.shell{
+  max-width:var(--maxw); margin-inline:auto;
+  padding:clamp(28px,5vw,48px) var(--pad) 80px;
+  display:grid;
+  grid-template-columns:1fr;              /* mobile: single column */
+  gap:clamp(32px, 5vw, 52px);
+}
+
+@media (min-width:900px){
+  .shell{
+    grid-template-columns:minmax(0,1fr) var(--side-w);
+    align-items:start;                    /* rows don't stretch */
+  }
+  .about{ grid-column:1; grid-row:1 }
+  .side{
+    grid-column:2; grid-row:1;
+
+    /* --- the sticky behaviour --- */
+    position:sticky;
+    top:calc(var(--header-h) + 28px);
+
+    /* CRITICAL: without this the grid item stretches to the full
+       height of the row, leaving it no room to travel, and sticky
+       silently does nothing. This is the #1 reason sticky "breaks". */
+    align-self:start;
+
+    /* If the sidebar is ever taller than the screen, let it scroll
+       internally instead of clipping the bottom off. */
+    max-height:calc(100vh - var(--header-h) - 56px);
+    overflow-y:auto;
+  }
+}
+
+/* ===========================================================
+   4. LEFT COLUMN — about / body content
+   =========================================================== */
+h1{ font-size:clamp(1.9rem,5vw,2.5rem); line-height:1.15;
+    letter-spacing:-.02em; font-weight:700 }
+h2{
+  font-size:.78rem; text-transform:uppercase; letter-spacing:.11em;
+  color:var(--muted); font-weight:650;
+  padding-bottom:10px; margin-bottom:20px; border-bottom:1px solid var(--line);
+}
+h3{ font-size:1.05rem; font-weight:650; line-height:1.35 }
+
+.about section + section{ margin-top:clamp(40px,6vw,60px) }
+.about p{ max-width:64ch }
+.about p + p{ margin-top:14px }
+.muted{ color:var(--muted) }
+.small{ font-size:.9rem }
+
+.status{
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:.8rem; font-weight:600;
+  background:var(--accent-bg); color:var(--accent);
+  padding:5px 12px; border-radius:99px; margin-bottom:16px;
+}
+.status::before{ content:""; width:7px; height:7px; border-radius:50%;
+                 background:currentColor; flex-shrink:0 }
+
+.lede{ font-size:1.1rem; color:var(--muted); margin-top:12px }
+
+/* ---- Project cards ---- */
+.card{
+  border:1px solid var(--line); border-radius:var(--radius);
+  padding:20px; margin-bottom:14px;
+  transition:border-color .15s, background .15s;
+}
+.card:hover{ border-color:var(--muted); background:var(--surface) }
+.card h3 a{ color:var(--fg); text-decoration:none }
+.card h3 a:hover{ color:var(--accent) }
+.card p{ margin-top:8px; font-size:.95rem; color:var(--muted) }
+
+/* Quantified outcome — the line that makes a project memorable */
+.impact{
+  margin-top:10px; font-size:.9rem; font-weight:600;
+  color:var(--fg); padding-left:11px; border-left:2.5px solid var(--accent);
+}
+.stack{ display:flex; flex-wrap:wrap; gap:6px; margin-top:14px }
+.stack li{
+  list-style:none; font-family:var(--mono); font-size:.74rem;
+  background:var(--surface); border:1px solid var(--line);
+  padding:3px 9px; border-radius:5px; color:var(--muted);
+}
+.links{ display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:.9rem }
+.links a{ font-weight:600 }
+
+/* ---- Experience + education ---- */
+.row{ display:flex; justify-content:space-between; align-items:baseline;
+      gap:16px; flex-wrap:wrap }
+.when{ font-size:.85rem; color:var(--muted); font-variant-numeric:tabular-nums;
+       white-space:nowrap }
+.job{ padding-bottom:26px; margin-bottom:26px; border-bottom:1px solid var(--line) }
+.job:last-child{ border-bottom:0; margin-bottom:0; padding-bottom:0 }
+.org{ color:var(--accent); font-weight:600; font-size:.95rem; margin-top:2px }
+.job ul{ margin-top:12px; padding-left:19px }
+.job li{ margin-bottom:7px; font-size:.95rem; color:var(--muted) }
+.job li::marker{ color:var(--accent) }
+
+/* ---- Skills ---- */
+.skills{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)) }
+.skills h4{ font-size:.8rem; text-transform:uppercase; letter-spacing:.07em;
+            color:var(--muted); margin-bottom:8px; font-weight:650 }
+.skills p{ font-size:.95rem }
+
+/* ===========================================================
+   5. RIGHT COLUMN — photo + contact card
+   =========================================================== */
+.side .photo{
+  display:block; width:100%; aspect-ratio:1;
+  object-fit:cover; object-position:50% 30%;
+  border-radius:var(--radius); border:1px solid var(--line);
+  background:var(--surface);
+}
+.side .name{ font-size:1.15rem; font-weight:700; margin-top:18px;
+             letter-spacing:-.01em }
+.side .role{ font-size:.9rem; color:var(--muted); margin-top:2px }
+
+.contact{
+  list-style:none; margin-top:18px;
+  border-top:1px solid var(--line); padding-top:14px;
+}
+.contact li + li{ margin-top:2px }
+.contact a,
+.contact .plain{
+  display:flex; align-items:center; gap:10px;
+  min-height:42px; padding:4px 0;          /* comfortable tap target */
+  font-size:.92rem; text-decoration:none; color:var(--fg);
+  word-break:break-word;
+}
+.contact .plain{ color:var(--muted) }
+.contact a:hover{ color:var(--accent) }
+.contact svg{ width:17px; height:17px; flex-shrink:0; color:var(--muted) }
+.contact a:hover svg{ color:var(--accent) }
+
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; margin-top:16px; min-height:44px;
+  padding:11px 18px; border-radius:var(--radius);
+  font-size:.95rem; font-weight:600; text-decoration:none;
+  background:var(--fg); color:var(--bg); border:1px solid var(--fg);
+}
+.btn:hover{ opacity:.88 }
+
+/* On mobile the card sits alone at the top — give it a little framing
+   so it reads as a unit rather than floating content. */
+@media (max-width:899px){
+  .side{
+    border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; background:var(--surface);
+  }
+  .side .photo{ max-width:190px; margin-inline:auto; border-radius:50% }
+  .side .name, .side .role{ text-align:center }
+  .contact{ max-width:320px; margin-inline:auto }
+  .btn{ max-width:320px; margin-inline:auto }
+}
+
+/* ===========================================================
+   6. FOOTER
+   =========================================================== */
+footer{
+  border-top:1px solid var(--line); padding:22px var(--pad);
+  text-align:center; font-size:.85rem; color:var(--muted);
+}
+
+/* ===========================================================
+   7. MOTION — subtle, and fully disabled if the user prefers
+   =========================================================== */
+@media (prefers-reduced-motion:no-preference){
+  .anim{ opacity:0; transform:translateY(14px);
+         transition:opacity .5s ease, transform .5s ease }
+  .anim.in{ opacity:1; transform:none }
+}
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto }
+  *{ animation:none !important; transition:none !important }
+}
+
+/* ===========================================================
+   8. PRINT — recruiters do print these. Ctrl+P gives a clean resume.
+   =========================================================== */
+@media print{
+  header, footer, .skip, .side .photo, .btn{ display:none !important }
+  :root{ --fg:#000; --bg:#fff; --muted:#333; --line:#bbb; --accent:#000 }
+  body{ font-size:11pt }
+  .shell{ display:block; max-width:100%; padding:0 }
+  .side{ position:static !important; max-height:none !important;
+         overflow:visible !important; border:0 !important;
+         background:none !important; padding:0 !important; margin-bottom:18pt }
+  .contact{ display:flex; flex-wrap:wrap; gap:0 18pt }
+  .contact svg{ display:none }
+  .about section{ padding-top:14pt; break-inside:avoid }
+  .card, .job{ break-inside:avoid }
+  .anim{ opacity:1 !important; transform:none !important }
+  a{ text-decoration:none; color:#000 }
+  .links a::after{ content:" (" attr(href) ")"; font-size:8pt; color:#555 }
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="bar">
+    <a href="#top" class="me">Stanley Barnes</a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+    </nav>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- ===================================================
+       RIGHT COLUMN ON DESKTOP / FIRST ON MOBILE
+       Stays fixed in place while the left column scrolls.
+       =================================================== -->
+  <aside class="side" aria-label="Contact details">
+    <img class="photo"
+         src="images/Headshot_Placeholder.jpeg"
+         alt="Stanley Barnes"
+         width="640" height="640"
+         loading="eager" decoding="async">
+    <p> REPLACE WITH PROFESSIONAL PICTURE!!!!</p>
+
+    <div class="name">Stanley Barnes</div>
+    <div class="role">Computer Engineering — UT Knoxville</div>
+
+    <ul class="contact">
+      <li>
+        <a href="mailto:wbarne12@vols.utk.edu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>
+          </svg>
+          wbarne12@vols.utk.edu
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/wbarne12" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/>
+          </svg>
+          github.com/wbarne12
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/stanley-barnes/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.77V21h-4v-5.5c0-1.31-.02-3-1.9-3-1.9 0-2.2 1.43-2.2 2.9V21H9z"/>
+          </svg>
+          linkedin.com/in/stanley-barnes
+        </a>
+      </li>
+      <li>
+        <span class="plain">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          Knoxville, TN — open to relocation
+        </span>
+      </li>
+    </ul>
+
+    <a class="btn" href="resume.pdf" download>Download resume (PDF)</a>
+  </aside>
+
+  <!-- ===================================================
+       LEFT COLUMN ON DESKTOP / SECOND ON MOBILE
+       =================================================== -->
+  <main class="about" id="main">
+
+    <section id="top">
+      <h1>About Me</h1>
+      <p class="lede">
+        Computer Engineering student at the <strong>University of Tennessee, Knoxville</strong>,
+        working on embedded systems, PCB design, and edge AI.
+      </p>
+      <p style="margin-top:18px">
+        I build low-power sensing platforms, custom PCBs, and machine learning models 
+        small enough to run on a microcontroller. Currently, I am an undergraduate research assistant 
+        for <a href="https://epic.eecs.utk.edu/">EPIC Lab</a> under <strong>Dr. Sai Swaminathan</strong>.
+        I specalize in designing the hardware necessary to understand the impact of AI in resource 
+        constrained enviroments. 
+      </p>
+
+      <p tyle="margin-top:18px">
+        I'm motivated to push the envelope of technology and see what computers are capable of doing. 
+        As transistors are nearing atom-level size, it is increasingly harder to shrink the transistors 
+        to boost performance. I want to explore different modes of computing, rethink the architecture of 
+        chips, all while making them more energy efficient. 
+      </p>
+    </section>
+
+    <section id="projects" class="anim">
+      <h2>Selected projects</h2>
+
+      <article class="card">
+        <h3>Teachable Things — on-device custom AI models</h3>
+        <p>
+          Low-power handheld edge AI platform that lets users build, train, and deploy custom
+          models entirely on the device. Designed for non-technical users, making model training
+          a hands-on learning experience rather than a cloud abstraction.
+        </p>
+        <p class="impact">Runs inference in 3 MB of memory on a 5 W power budget.</p>
+        <ul class="stack">
+          <li>C</li><li>STM32</li><li>LVGL</li><li>KiCad</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3><a href="https://github.com/EPIC-Lab-UT/Test-Strip-Based-Water-Quality-Monitoring" target="_blank" rel="noopener">Smokey Buoy — autonomous water quality monitoring</a></h3>
+        <p>
+          Low-cost, energy-efficient, fully autonomous buoy that monitors water pollutants
+          including nitrates, phosphates, heavy metals, and industrial contaminants. Uses
+          colorimetric assay strips combined with on-device edge AI to estimate pollutant
+          concentration within 96% confidence.
+        </p>
+        <p class="impact">Deployed with rural farming communities from Tennessee to Hawaii.</p>
+        <ul class="stack">
+          <li>KiCad</li><li>Fusion 360</li><li>LTspice</li><li>TensorFlow Lite</li>
+        </ul>
+        <div class="links">
+          <a href="https://chi2027.acm.org/" target="_blank" rel="noopener">Paper →</a>
+          <a href="https://github.com/EPIC-Lab-UT/Test-Strip-Based-Water-Quality-Monitoring" target="_blank" rel="noopener">Source →</a>
+          <a href="hardware.html">Hardware &amp; design →</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Senior design — Sonoco paint can defect detection</h3>
+        <p>
+          Performed root cause analysis on an active production line to reduce painting defects
+          during manufacturing, then deployed vision-based AI cameras that flag errors before a
+          machine operator would catch them.
+        </p>
+        <p class="impact">Cut cost of lost product by 79%.</p>
+        <ul class="stack">
+          <li>Python</li><li>Raspberry Pi</li><li>Computer vision</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="experience" class="anim">
+      <h2>Experience</h2>
+
+      <div class="job">
+        <div class="row">
+          <div>
+            <h3>Undergraduate Research Assistant</h3>
+            <div class="org">EPIC Lab — Min H. Kao Dept. of EECS, UT Knoxville</div>
+          </div>
+          <div class="when">May 2025 — Present</div>
+        </div>
+        <ul>
+          <li>Designed and tested PCBs for embedded systems, power delivery, and edge computing.</li>
+          <li>Modeled and 3D printed weatherproof enclosures for field-deployed research prototypes.</li>
+          <li>Co-authoring a paper submission on test-strip-based water quality sensing, and user-trainable,
+            custom AI microcontrollers.
+          </li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="row">
+          <div>
+            <h3>Teaching Assistant — COSC 559, Human-Computer Interaction</h3>
+            <div class="org">University of Tennessee, Knoxville</div>
+          </div>
+          <div class="when">Aug 2026 — Present</div>
+        </div>
+        <ul>
+          <li>Run weekly lab sections for 30 graduate students and graded programming assignments.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="skills" class="anim">
+      <h2>Skills</h2>
+      <div class="skills">
+        <div>
+          <h4>Software</h4>
+          <p class="muted">C, C++, Python, Java, Linux, Git, MATLAB</p>
+        </div>
+        <div>
+          <h4>Hardware design</h4>
+          <p class="muted">KiCad, Cadence Virtuoso, Verilog, Xilinx FPGA, ARM, Fusion 360, LTspice, Keysight ADS</p>
+        </div>
+        <div>
+          <h4>Lab equipment</h4>
+          <p class="muted">Oscilloscope, waveform generator, logic analyzer, spectrum analyzer</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="anim">
+      <h2>Education</h2>
+      <div class="row">
+        <div>
+          <h3>B.S. Computer Engineering</h3>
+          <div class="org">University of Tennessee, Knoxville — GPA 3.92 / 4.0</div>
+        </div>
+        <div class="when">Expected May 2027</div>
+      </div>
+      <p class="muted small" style="margin-top:12px">
+        Relevant coursework: VLSI, Microwave Circuits, Embedded Systems, Operating Systems,
+        System on Chip, Computer Architecture, Digital Systems Design.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>© <span id="yr">2026</span> Stanley Barnes · Knoxville, TN</p>
+</footer>
+
+<!-- Helps Google show your name, job title and links correctly in results -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Person",
+  "name":"Stanley Barnes",
+  "jobTitle":"Computer Engineering Student",
+  "email":"mailto:wbarne12@vols.utk.edu",
+  "alumniOf":"University of Tennessee, Knoxville",
+  "sameAs":["https://github.com/wbarne12","https://www.linkedin.com/in/stanley-barnes"]
+}
+</script>
+
+<script>
+/* Remove the no-js guard immediately so animations can run */
+document.documentElement.classList.remove('no-js');
+
+/* ---------- Year ---------- */
+var yr = document.getElementById('yr');
+if (yr) { yr.textContent = new Date().getFullYear(); }
+
+/* ---------- Gentle fade-in on scroll (skipped if motion is reduced) ---------- */
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin:'0px 0px -60px 0px' });
+  document.querySelectorAll('.anim').forEach(function(el){ io.observe(el); });
+} else {
+  document.querySelectorAll('.anim').forEach(function(el){ el.classList.add('in'); });
+}
+</script>
+</body>
+</html>

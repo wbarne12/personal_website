@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- ============ EDIT THESE THREE LINES FIRST ============ -->
+<title>Stanley Barnes — Computer Engineer</title>
+<meta name="description" content="Stanley Barnes — Computer Engineering student at the University of Tennessee, Knoxville." />
+<link rel="canonical" href="https://stanleybarnes.com/" />
+<!-- ====================================================== -->
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+<!-- Social preview (shows when your link is pasted into LinkedIn/Slack) -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Stanley Barnes|Computer Engineer" />
+<meta property="og:description" content="Comp Eng student at UT Knoxville." />
+<meta property="og:url" content="https://stanleybarnes.com/" />
+
+<!-- Inline SVG favicon: no extra file, no extra request -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f2760c'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='16' font-weight='700' fill='%23fff' text-anchor='middle'%3EWB%3C/text%3E%3C/svg%3E" />
+
+<style>
+/* ===========================================================
+   DESIGN TOKENS — change these to restyle the whole site
+   =========================================================== */
+:root{
+  --bg:        #ffffff;
+  --surface:   #f7f7f5;
+  --fg:        #14161a;
+  --muted:     #5d646e;
+  --line:      #e3e4e1;
+  --accent:    #b4530a;          /* links, highlights */
+  --accent-bg: #fdf3e9;
+  --focus:     #0b64d6;
+
+  --maxw: 760px;                  /* single readable column */
+  --radius: 10px;
+  --pad: clamp(20px, 5vw, 32px);
+
+  /* System font stack = zero font downloads = instant text */
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Dark mode: follows the device, with a manual override */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111418; --surface:#181c22; --fg:#e9ecef; --muted:#a2abb6;
+    --line:#2a3039; --accent:#f2a25c; --accent-bg:#241b12; --focus:#7fb4ff;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111418; --surface:#181c22; --fg:#e9ecef; --muted:#a2abb6;
+  --line:#2a3039; --accent:#f2a25c; --accent-bg:#241b12; --focus:#7fb4ff;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0 }
+
+html{ scroll-behavior:smooth; scroll-padding-top:70px; -webkit-text-size-adjust:100% }
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Visible keyboard focus everywhere — accessibility baseline */
+:focus-visible{ outline:2.5px solid var(--focus); outline-offset:3px; border-radius:3px }
+
+a{ color:var(--accent); text-decoration:underline; text-underline-offset:3px;
+   text-decoration-thickness:1px }
+a:hover{ text-decoration-thickness:2px }
+
+/* Skip link for screen readers / keyboard users */
+.skip{
+  position:absolute; left:-9999px; top:8px; z-index:200;
+  background:var(--fg); color:var(--bg); padding:10px 16px; border-radius:6px;
+}
+.skip:focus{ left:8px }
+
+/* ===========================================================
+   HEADER — compact, sticky, always one tap from any section
+   =========================================================== */
+header{
+  position:sticky; top:0; z-index:100;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.bar{
+  max-width:var(--maxw); margin-inline:auto;
+  padding:10px var(--pad);
+  display:flex; align-items:center; gap:14px;
+}
+.bar .me{ font-weight:650; font-size:15px; text-decoration:none; color:var(--fg);
+          white-space:nowrap }
+.bar nav{ display:flex; gap:4px; margin-left:auto; flex-wrap:wrap }
+.bar nav a{
+  font-size:14px; color:var(--muted); text-decoration:none;
+  padding:6px 10px; border-radius:6px;
+}
+.bar nav a:hover{ color:var(--fg); background:var(--surface) }
+
+#themeBtn{
+  font:inherit; font-size:15px; line-height:1; cursor:pointer;
+  background:none; border:1px solid var(--line); color:var(--muted);
+  width:34px; height:34px; border-radius:8px; flex-shrink:0;
+  display:grid; place-items:center;
+}
+#themeBtn:hover{ color:var(--fg); border-color:var(--muted) }
+
+/* On phones, hide the section links — the page is short enough to scroll */
+@media (max-width:640px){ .bar nav{ display:none } }
+
+/* ===========================================================
+   LAYOUT
+   =========================================================== */
+main{ max-width:var(--maxw); margin-inline:auto; padding:0 var(--pad) 72px }
+
+section{ padding-top:clamp(40px, 7vw, 60px) }
+
+h1{ font-size:clamp(1.9rem, 6vw, 2.6rem); line-height:1.15; letter-spacing:-.02em;
+    font-weight:700 }
+h2{
+  font-size:.78rem; text-transform:uppercase; letter-spacing:.11em;
+  color:var(--muted); font-weight:650;
+  padding-bottom:10px; margin-bottom:22px; border-bottom:1px solid var(--line);
+}
+h3{ font-size:1.05rem; font-weight:650; line-height:1.35 }
+p{ max-width:66ch }
+.muted{ color:var(--muted) }
+.small{ font-size:.9rem }
+
+/* ===========================================================
+   HERO — name, what you do, how to reach you. No scrolling needed.
+   =========================================================== */
+#top{ padding-top:clamp(36px, 8vw, 64px) }
+
+.status{
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:.8rem; font-weight:600;
+  background:var(--accent-bg); color:var(--accent);
+  padding:5px 12px; border-radius:99px; margin-bottom:18px;
+}
+.status::before{
+  content:""; width:7px; height:7px; border-radius:50%;
+  background:currentColor; flex-shrink:0;
+}
+
+.tagline{ font-size:1.1rem; color:var(--muted); margin-top:12px; max-width:58ch }
+
+/* Action buttons — big tap targets, thumb-friendly on mobile */
+.actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px }
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:11px 18px; border-radius:var(--radius);
+  font-size:.95rem; font-weight:600; text-decoration:none;
+  border:1px solid var(--line); color:var(--fg); background:var(--bg);
+  min-height:44px;                       /* Apple's minimum touch target */
+  transition:background .15s, border-color .15s;
+}
+.btn:hover{ background:var(--surface); border-color:var(--muted) }
+.btn.primary{ background:var(--fg); color:var(--bg); border-color:var(--fg) }
+.btn.primary:hover{ opacity:.88; background:var(--fg) }
+
+/* ===========================================================
+   PROJECTS — the section recruiters actually read
+   =========================================================== */
+.card{
+  border:1px solid var(--line); border-radius:var(--radius);
+  padding:20px; margin-bottom:14px;
+  transition:border-color .15s, background .15s;
+}
+.card:hover{ border-color:var(--muted); background:var(--surface) }
+.card h3 a{ color:var(--fg); text-decoration:none }
+.card h3 a:hover{ color:var(--accent) }
+.card p{ margin-top:8px; font-size:.95rem; color:var(--muted) }
+
+/* Quantified outcome — the line that makes a project memorable */
+.impact{
+  margin-top:10px; font-size:.9rem; font-weight:600;
+  color:var(--fg); padding-left:11px; border-left:2.5px solid var(--accent);
+}
+
+.stack{ display:flex; flex-wrap:wrap; gap:6px; margin-top:14px }
+.stack li{
+  list-style:none; font-family:var(--mono); font-size:.74rem;
+  background:var(--surface); border:1px solid var(--line);
+  padding:3px 9px; border-radius:5px; color:var(--muted);
+}
+.links{ display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:.9rem }
+.links a{ font-weight:600 }
+
+/* ===========================================================
+   EXPERIENCE + EDUCATION
+   =========================================================== */
+.row{ display:flex; justify-content:space-between; align-items:baseline;
+      gap:16px; flex-wrap:wrap }
+.when{ font-size:.85rem; color:var(--muted); font-variant-numeric:tabular-nums;
+       white-space:nowrap }
+.job{ padding-bottom:26px; margin-bottom:26px; border-bottom:1px solid var(--line) }
+.job:last-child{ border-bottom:0; margin-bottom:0; padding-bottom:0 }
+.org{ color:var(--accent); font-weight:600; font-size:.95rem; margin-top:2px }
+.job ul{ margin-top:12px; padding-left:19px }
+.job li{ margin-bottom:7px; font-size:.95rem; color:var(--muted) }
+.job li::marker{ color:var(--accent) }
+
+/* ===========================================================
+   SKILLS
+   =========================================================== */
+.skills{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)) }
+.skills h4{ font-size:.8rem; text-transform:uppercase; letter-spacing:.07em;
+            color:var(--muted); margin-bottom:8px; font-weight:650 }
+.skills p{ font-size:.95rem }
+
+/* ===========================================================
+   CONTACT
+   =========================================================== */
+#contact .box{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:26px;
+}
+.contact-list{ list-style:none; margin-top:18px; display:grid; gap:11px }
+.contact-list a{ font-weight:600; font-size:1.02rem; word-break:break-word }
+.contact-list span{ display:inline-block; width:80px; color:var(--muted);
+                    font-size:.82rem; text-transform:uppercase; letter-spacing:.06em }
+
+footer{
+  border-top:1px solid var(--line); margin-top:56px; padding:22px var(--pad);
+  text-align:center; font-size:.85rem; color:var(--muted);
+}
+
+/* ===========================================================
+   MOTION — subtle, and fully disabled if the user prefers
+   =========================================================== */
+@media (prefers-reduced-motion:no-preference){
+  .anim{ opacity:0; transform:translateY(14px);
+         transition:opacity .5s ease, transform .5s ease }
+  .anim.in{ opacity:1; transform:none }
+}
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto }
+  *{ animation:none !important; transition:none !important }
+}
+
+/* ===========================================================
+   PRINT — recruiters do print these. Ctrl+P gives a clean resume.
+   =========================================================== */
+@media print{
+  header, #themeBtn, .actions, footer, .skip{ display:none !important }
+  :root{ --fg:#000; --bg:#fff; --muted:#333; --line:#bbb; --accent:#000 }
+  body{ font-size:11pt }
+  main{ max-width:100%; padding:0 }
+  section{ padding-top:16pt; break-inside:avoid }
+  .card, .job{ break-inside:avoid }
+  a{ text-decoration:none; color:#000 }
+  .links a::after{ content:" (" attr(href) ")"; font-size:8pt; color:#555 }
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="bar">
+    <a href="#top" class="me">Stanley Barnes</a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    
+  </div>
+</header>
+
+<main id="main">
+
+</main>
+
+<footer>
+  <p>© <span id="yr">2026</span> Stanley Barnes</p>
+</footer>
+
+<!-- Helps Google show your name, job title and links correctly in results -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Person",
+  "name":"Stanley Barnes",
+  "jobTitle":"Computer Engineer",
+  "email":"mailto:wbarne12@vols.utk.edu",
+  "alumniOf":"University of Tennessee, Knoxville",
+  "sameAs":["https://github.com/wbarne12", "https://www.linkedin.com/in/stanley-barnes"]
+}
+</script>
+
+<script>
+/* ---------- Year ---------- */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ---------- Gentle fade-in on scroll (skipped if motion is reduced) ---------- */
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin:'0px 0px -60px 0px' });
+  document.querySelectorAll('.anim').forEach(function(el){ io.observe(el); });
+} else {
+  document.querySelectorAll('.anim').forEach(function(el){ el.classList.add('in'); });
+}
+</script>
+</body>
+</html>
